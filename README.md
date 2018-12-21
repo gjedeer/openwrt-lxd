@@ -1,4 +1,6 @@
-Note:  This is incomplete.  It is superceded by https://github.com/mikma/lxd-openwrt
+Note:  This is a work in progress, and does not require rebuilding or compiling. Because of that, it should support *any* processor type including ARM.
+
+If you would rather build OpenWrt, please see the github project https://github.com/mikma/lxd-openwrt (x86 support only)
 
 ---------------------------------------------
 
@@ -11,27 +13,6 @@ I hope someone who knows OpenWRT better than I do can fix this.
 
 Naturally, you can run this script inside an LXD container.  I use a privileged Ubuntu 18.04 container, so I can run things like mknod (it is not needed yet).
 
-Run as follows:
-
-	sudo ./build.sh {version}
-
-Run without arguments to find out the available versions:
-
-	sudo ./build.sh
-
-barrier_breaker is not usable.
-
-The dhcp versions modify the network configuration so that the container gets its ip address from dhcp.  They also remove the wan interface.  You can experiment with other network configurations.
-
-If you use the original network configuration, which includes a DHCP server, other containers may start getting their ip addresses from the OpenWRT container (which may be useful, if you disable the LXD DHCP server).
-
-
-Ths script downloads rootfs tar.gz from openwrt.org, modifies it slightly, and generates LXD metadata.
-
-rootfs tarballs are downloaded in ./cache, if they are not already there.
-If you want to get fresh ones, delete the old ones first.
-
-The resulting images are generated in ./target/{version}/image
 
 The openwrt container should be privileged:
 
@@ -57,11 +38,24 @@ If you try to run "halt" or "reboot" before completing the boot process, it won'
 
 The resulting container seems functional.
 You can access the Luci Web Interface.
-If you try to login to it with ssh, you get an error:
 
-	PTY allocation request failed on channel 0
-	shell request failed on channel 0
+SSH access is limited, as a terminal isn't established, but it is possible to ssh into the container.
+
+```
+ssh root@<container> "/bin/sh" -i
+BusyBox v1.28.3 () built-in shell (ash)
+
+/root # /bin/sh: can't access tty; job control turned off
+
+/root # 
+```
+
+Because of the lack of a `tty` vi does not work very well.
 
 But you can use scp, rsync, and run non-interactive commands with ssh.
 
-barrier_breaker does not boot properly into multiuser mode.  However, you can halt or reboot it.  init.sh does not fix it.  This script does not modify rootfs in this case.  It just adds metadata.
+The script has been tested with LXD 3.0.2 and OpenWrt 18.06 on a Raspberry Pi running 4.15.0-1029-raspi2 #31-Ubuntu
+
+Thanks to **melato** for pointing me on the right path.
+
+
