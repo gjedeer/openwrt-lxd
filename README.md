@@ -314,7 +314,7 @@ http://[2001:db8:ebbd:2080::93b]/
 ```
 Follow the instructions to set a password.
 
-![OpenWrt Web GUI](https://raw.githubusercontent.com/cvmiller/openwrt-lxd/master/figures/lxc_virtual_router_openwrt.png)
+![OpenWrt Web GUI](https://raw.githubusercontent.com/cvmiller/openwrt-lxd/master/figures/virtual_router_openwrt.png)
 
 
 ### OpenWrt LXD testing
