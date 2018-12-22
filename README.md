@@ -8,7 +8,7 @@ Enable OpenWrt to run on LXD (Linux Containers), enabling full routing, firewall
 This does not require rebuilding or compiling. Because of that, it should support *any* processor type including ARM.
 
 
-![Virtual Network](http://www.makikiweb.com/ipv6/_images/lxc_network_openwrt.png)
+![Virtual Network](https://raw.githubusercontent.com/cvmiller/openwrt-lxd/master/figures/lxc_network_openwrt.png)
 
 ### Benefits of using OpenWrt & LXD
 
@@ -314,7 +314,7 @@ http://[2001:db8:ebbd:2080::93b]/
 ```
 Follow the instructions to set a password.
 
-![OpenWrt Web GUI](http://www.makikiweb.com/ipv6/_images/lxc_virtual_router_openwrt.png)
+![OpenWrt Web GUI](https://raw.githubusercontent.com/cvmiller/openwrt-lxd/master/figures/lxc_virtual_router_openwrt.png)
 
 
 ### OpenWrt LXD testing
