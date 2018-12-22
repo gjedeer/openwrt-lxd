@@ -13,7 +13,7 @@ This does not require rebuilding or compiling. Because of that, it should suppor
 ### Benefits of using OpenWrt & LXD
 
 The benefits of a virtual OpenWrt Router are:
-* full IPv4/IPv6 firewall - protecting the containers behind it, thus reducing the threat surface
+* Full IPv4/IPv6 firewall - protecting the containers behind it, thus reducing the threat surface
 * Excellent IPv6 support, including DHCPv6-PD (Prefix Delegation) which allows automatic IPv6 prefix (think: subnet) on the lxdbr0 bridge
 * Full routing protocol support via `bird` and `bird6` (see [RIPng the forgotten routing protocol](http://www.makikiweb.com/ipv6/ripng.html) )
 
@@ -286,9 +286,14 @@ Additionally, if you have *connected* the router up the right way (e.g. WAN=eth1
 
 The LuCI web interface by default is blocked on the WAN interface. However it is the easiest way to manage the `router`. A firewall rule allowing web access from the WAN must be inserted.
 
-The standard way it to add the following to bottom of the `/etc/config/firewall` file.
+The standard way it to add the following to bottom of the `/etc/config/firewall` file within the OpenWrt container.
 
 ```
+lxc exec router sh
+
+# vi /etc/config/firewall
+
+...
 config rule                      
         option target 'ACCEPT'   
         option src 'wan'         
@@ -296,7 +301,7 @@ config rule
         option dest_port '80'    
         option name 'ext_web'                                   
 ``` 
-Then restart the firewall
+Save the file and then restart the firewall within the OpenWrt container.
 
 ```
 /etc/init.d/firewall restart
@@ -307,7 +312,7 @@ Now you should be able to point your web browser to the WAN address (see eth1 ab
 ```
 http://[2001:db8:ebbd:2080::93b]/
 ```
-Follow the instructions to assign a password.
+Follow the instructions to set a password.
 
 ![OpenWrt Web GUI](http://www.makikiweb.com/ipv6/_images/lxc_virtual_router_openwrt.png)
 
