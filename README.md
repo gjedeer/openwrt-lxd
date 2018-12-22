@@ -284,7 +284,7 @@ Additionally, if you have *connected* the router up the right way (e.g. WAN=eth1
 
 ### Managing the Virtual OpenWrt router
 
-The LuCI web interface by default is blocked on the WAN interface, which is mostly likely the easiest way to get to the `router`. A firewall rule allowing web access from the WAN must be inserted.
+The LuCI web interface by default is blocked on the WAN interface. However it is the easiest way to manage the `router`. A firewall rule allowing web access from the WAN must be inserted.
 
 The standard way it to add the following to bottom of the `/etc/config/firewall` file.
 
@@ -314,7 +314,7 @@ Follow the instructions to assign a password.
 
 ### OpenWrt LXD testing
 
-The `init.sh` script has been tested with LXD 3.0.2 and OpenWrt 18.06 on a Raspberry Pi running 4.15.0-1029-raspi2 #31-Ubuntu
+The `init.sh` script has been tested with LXD 3.0.2 and OpenWrt 18.06.1 on a Raspberry Pi running 4.15.0-1029-raspi2 #31-Ubuntu
 
 
 ### Limitations
@@ -325,13 +325,13 @@ Not everything is perfect, even in the virtual world. There are some limitations
 	* And after logging in, you will get an error about the tty. Full screen apps like `vi` are difficult to use.
 	* But you can use scp, rsync, and run non-interactive commands with ssh.
 
-* `init.sh` doesn't run at boot. Haven't figured out how to do this yet, since the boot stalls.
+* `init.sh` doesn't run at boot. Haven't figured out how to do this yet, since the boot stalls very early in the process.
 
 * Container will not **stop** via the `lxc stop` command. You must use:
 	* `lxc stop --force router` or
 	* `lxc exec router -- halt`
 
-* If you took all the defaults when running `lxd init` then lxd will have a DHCP4 server running on the bridge `lxdbr0`. Downstream containers may not get the correct IPv4 address  DHCP4 on LXD can be disabled with `lxc network set lxdbr0 ipv4.address none`
+* If you took all the defaults when running `lxd init` then lxd will have a DHCP4 server running on the bridge `lxdbr0`. Downstream containers may not get the correct IPv4 address.  DHCP4 on LXD can be disabled with `lxc network set lxdbr0 ipv4.address none`
 
 * wireless interfaces don't work. What is a virtual wireless interface anyway?
 
