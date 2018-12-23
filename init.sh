@@ -5,6 +5,7 @@
 # Modified by Craig Miller
 # December 2018
 
+VERSION="0.9"
 
 # make devices
 mknod -m 666 /dev/zero c 1 5
@@ -45,3 +46,6 @@ WAN=$(uci get network.wan.ifname)
 if [ $(uci get firewall.@zone[1].masq) -eq 1 ]; then
    /usr/sbin/iptables -t nat -A POSTROUTING -o $WAN -j MASQUERADE
 fi
+
+echo "Pau!"
+
