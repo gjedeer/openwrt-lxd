@@ -96,8 +96,7 @@ The steps to get your virtual OpenWrt up and running are:
 
 I use `router` as the name of the OpenWrt container
 ```
-lxc launch local:openwrt_armhf router
-lxc stop --force router
+lxc init local:openwrt_armhf router
 lxc config set router security.privileged true
 ```
 In order for `init.sh` to run the `mknod` command the container must run as *privileged*.
@@ -315,6 +314,47 @@ http://[2001:db8:ebbd:2080::93b]/
 Follow the instructions to set a password.
 
 ![OpenWrt Web GUI](https://raw.githubusercontent.com/cvmiller/openwrt-lxd/master/figures/virtual_router_openwrt.png)
+
+
+### Looking at the Virtual OpenWrt from LXC
+
+Type `exit` to return to the Raspberry Pi prompt. By looking at some `lxc` output, we can see the virtual network up and running.
+
+```
+$ lxc ls
++---------+---------+------------------------+-----------------------------------------------+------------+-----------+
+|  NAME   |  STATE  |          IPV4          |                     IPV6                      |    TYPE    | SNAPSHOTS |
++---------+---------+------------------------+-----------------------------------------------+------------+-----------+
+| docker1 | RUNNING | 192.168.215.220 (eth0) | fd6a:c19d:b07:2080:216:3eff:fe58:1ac9 (eth0)  | PERSISTENT | 0         |
+|         |         | 172.17.0.1 (docker0)   | fd4b:7e4:111:0:216:3eff:fe58:1ac9 (eth0)      |            |           |
+|         |         |                        | 2001:db8:ebbd:2080:216:3eff:fe58:1ac9 (eth0)  |            |           |
++---------+---------+------------------------+-----------------------------------------------+------------+-----------+
+| router  | RUNNING | 192.168.215.198 (eth1) | fd6a:c19d:b07:2084::1 (br-lan)                | PERSISTENT | 1         |
+|         |         | 192.168.1.1 (br-lan)   | fd6a:c19d:b07:2080::8d1 (eth1)                |            |           |
+|         |         |                        | fd6a:c19d:b07:2080:216:3eff:fe72:44b6 (eth1)  |            |           |
+|         |         |                        | fd4b:7e4:111::1 (br-lan)                      |            |           |
+|         |         |                        | fd4b:7e4:111:0:216:3eff:fe72:44b6 (eth1)      |            |           |
+|         |         |                        | 2001:db8:ebbd:2084::1 (br-lan)                |            |           |
+|         |         |                        | 2001:db8:ebbd:2080::8d1 (eth1)                |            |           |
+|         |         |                        | 2001:db8:ebbd:2080:216:3eff:fe72:44b6 (eth1)  |            |           |
++---------+---------+------------------------+-----------------------------------------------+------------+-----------+
+| www     | RUNNING | 192.168.1.158 (eth0)   | fd6a:c19d:b07:2084:216:3eff:fe01:e0a3 (eth0)  | PERSISTENT | 0         |
+|         |         |                        | fd4b:7e4:111:0:216:3eff:fe01:e0a3 (eth0)      |            |           |
+|         |         |                        | fd42:dc68:dae9:28e9:216:3eff:fe01:e0a3 (eth0) |            |           |
+|         |         |                        | 2001:db8:ebbd:2084:216:3eff:fe01:e0a3 (eth0)  |            |           |
++---------+---------+------------------------+-----------------------------------------------+------------+-----------+
+
+```
+
+The `docker1` container is still running from [Linux Containers on the Pi](http://www.makikiweb.com/Pi/lxc_on_the_pi.html), and still connected to the *outside* network **br0**. You can see this by the addressing assigned (both v4 and v6).
+
+The `router` container (which is running OpenWrt) has both **eth1** (aka WAN) and **br-lan** (aka LAN) interfaces. The **br-lan** interface is connected to the *inside* **lxdbr0** virtual network. And OpenWrt routes between the two networks.
+
+Lastly the `www` container is just another instantiation of the web container (created in [Linux Containers on the Pi](http://www.makikiweb.com/Pi/lxc_on_the_pi.html)), but connected to the *inside* network. It was started with the following command:
+
+```
+lxc launch -p default local:web_image www
+```
 
 
 ### OpenWrt LXD testing
