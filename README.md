@@ -33,9 +33,9 @@ If you would rather build OpenWrt, please see the github project [https://github
 
 ### Installing LXD on the Raspberry Pi
 
-Unfortunately the default Raspian image does not support name spaces or cgroups which are used to isolate the Linux Containers. Fortunately, there is a [Ubuntu 18.04](https://wiki.ubuntu.com/ARM/RaspberryPi) image available for the Pi which does.
+Unfortunately the default Raspian image does not support name spaces or cgroups which are used to isolate the Linux Containers. Fortunately, there is a [Ubuntu 18.04](https://www.finnie.org/software/raspberrypi/ubuntu-rpi3/ubuntu-18.04-preinstalled-server-armhf+raspi3.img.xz) image available for the Pi which does. Be sure to follow the login directions on the [ARM Ubuntu Page](https://wiki.ubuntu.com/ARM/RaspberryPi#First_boot_.28Username.2FPassword.29)
 
-If you haven't already installed LXD on your Raspberry Pi, please look at [Linux Containers on the Pi](http://www.makikiweb.com/Pi/lxc_on_the_pi.html) blog post.
+LXD binaries are already installed on the image, but `lxd init` must still be run. If you are not familiar with LXD, please look at [Linux Containers on the Pi](http://www.makikiweb.com/Pi/lxc_on_the_pi.html) blog post.
 
 ### Creating a LXD Image
 
