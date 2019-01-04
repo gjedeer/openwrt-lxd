@@ -33,7 +33,10 @@ If you would rather build OpenWrt, please see the github project [https://github
 
 ### Installing LXD on the Raspberry Pi
 
-Unfortunately the default Raspian image does not support name spaces or cgroups which are used to isolate the Linux Containers. Fortunately, there is a [Ubuntu 18.04](https://www.finnie.org/software/raspberrypi/ubuntu-rpi3/ubuntu-18.04-preinstalled-server-armhf+raspi3.img.xz) image available for the Pi which does. Be sure to follow the login directions on the [ARM Ubuntu Page](https://wiki.ubuntu.com/ARM/RaspberryPi#First_boot_.28Username.2FPassword.29)
+Unfortunately the default Raspian image does not support name spaces or cgroups which are used to isolate the Linux Containers. Fortunately, there is an [Unofficial Ubuntu 18.04](https://www.finnie.org/software/raspberrypi/ubuntu-rpi3/ubuntu-18.04-preinstalled-server-armhf+raspi3.img.xz) image available for the Pi which does. Be sure to follow the login directions on the [ARM Ubuntu Page](https://wiki.ubuntu.com/ARM/RaspberryPi#First_boot_.28Username.2FPassword.29)
+
+**Additionally** follow the steps to [boot the unofficial image on the **Raspberry 3B+**](https://wiki.ubuntu.com/ARM/RaspberryPi#Booting_the_official_Pi_2_image_on_the_Pi_3B.2F3B.2B-). Be sure to update the `config.txt` file and update the bootloader files. The **Raspsberry 3B** can boot the unofficial image without these extra steps.
+
 
 LXD binaries are already installed on the image, but `lxd init` must still be run. If you are not familiar with LXD, please look at [Linux Containers on the Pi](http://www.makikiweb.com/Pi/lxc_on_the_pi.html) blog post.
 
@@ -114,12 +117,12 @@ lxc profile edit twointf
 	  eth0:
 	    name: eth0
 	    nictype: bridged
-	    parent: br0
+	    parent: lxdbr0
 	    type: nic
 	  eth1:
 	    name: eth1
 	    nictype: bridged
-	    parent: lxdbr0
+	    parent: br0
 	    type: nic
 	  root:
 	    path: /
@@ -357,9 +360,15 @@ lxc launch -p default local:web_image www
 ```
 
 
+#### Managing the OpenWrt Firewall
+
+In order to permit access to webservers, a firewall rule on the virtual OpenWrt must allow the traffic. Add a new **rule** to allow port 80 traffic to pass to any host on the *inside* network (the lxdbr0 bridge) using the Web GUI (LuCI).
+
+
+
 ### OpenWrt LXD testing
 
-The `init.sh` script has been tested with LXD 3.0.2 and OpenWrt 18.06.1 on a Raspberry Pi running 4.15.0-1029-raspi2 #31-Ubuntu
+The `init.sh` script has been tested with LXD 3.0.2 and OpenWrt 18.06.1 on a Raspberry Pi 3B & 3B+ running 4.15.0-1029-raspi2 #31-Ubuntu
 
 
 ### Limitations
