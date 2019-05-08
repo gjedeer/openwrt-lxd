@@ -13,6 +13,7 @@ mknod -m 666 /dev/full c 1 7
 mknod -m 666 /dev/random c 1 8
 mknod -m 666 /dev/urandom c 1 9
 mknod -m 666 /dev/null c 1 3
+mknod -m 666 /dev/ptmx c 5 2
 
 # unmount /dev/pts in order to make nodes for ssh access
 umount /dev/pts
